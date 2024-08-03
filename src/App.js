@@ -1,24 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+// src/App.js
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import UserForm from './components/UserForm';
+import UserList from './components/UserList';
+import UserDetail from './components/UserDetail';
+import { Container, CssBaseline, AppBar, Toolbar, Typography } from '@mui/material';
+import Page404 from './components/Page404';
+import {createUser} from './services/userService'
 
 function App() {
+  const handleUserSubmit = async (userData) => {
+    try {
+      const createdUser = await createUser(userData);
+      console.log('User created successfully:', createdUser);
+    } catch (error) {
+      console.error('Error creating user:', error);
+    }
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <CssBaseline />
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">QR Code Generator</Typography>
+        </Toolbar>
+      </AppBar>
+      <Container>
+        <Routes>
+          <Route path="/" element={<UserList />} />
+          <Route path="/users/new" element={<UserForm onSubmit={handleUserSubmit} />} />
+          <Route path="/users/edit/:id" element={<UserForm />} />
+          <Route path="/users/:id" element={<UserDetail />} />
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </Container>
+    </Router>
   );
 }
 
