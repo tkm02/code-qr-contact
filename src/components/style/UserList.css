@@ -1,0 +1,36 @@
+/* src/components/UserList.css */
+
+.container-list {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 90%;
+    margin: 0 auto;
+  }
+  
+  .title {
+    margin-bottom: 24px;
+    text-align: center;
+  }
+  
+  .grid-container-list {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 24px;
+
+  }
+  
+  .grid-item-list {
+    box-sizing: border-box;
+
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 24px;
+  }
+  

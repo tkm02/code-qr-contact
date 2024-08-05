@@ -1,9 +1,9 @@
 // src/components/UserList.js
 import React, { useEffect, useState } from 'react';
 import { getAllUsers, deleteUser } from '../services/userService';
-import { Link } from 'react-router-dom';
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Typography } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
+import QRCard from './QRCard';
+import './style/UserList.css';
+import { Pagination } from '@mui/material';
 
 const UserList = () => {
   const [users, setUsers] = useState([]);
@@ -23,23 +23,18 @@ const UserList = () => {
   };
 
   return (
-    <div>
-      <Typography variant="h4" gutterBottom>User List</Typography>
-      <List>
-        {users.map(user => (
-          <ListItem key={user._id}>
-            <ListItemText primary={`${user.firstName} ${user.lastName}`} />
-            <ListItemSecondaryAction>
-              <IconButton edge="end" aria-label="delete" onClick={() => handleDelete(user._id)}>
-                <DeleteIcon />
-              </IconButton>
-              <IconButton edge="end" component={Link} to={`/users/${user._id}`}>
-                Details
-              </IconButton>
-            </ListItemSecondaryAction>
-          </ListItem>
+    <div className="container-list">
+      <h4 className="title">Listes QR code</h4>
+      <div className="grid-container-list">
+        {users.map((user, index) => (
+          <div className="grid-item-list" key={index}>
+            <QRCard user={user} />
+          </div>
         ))}
-      </List>
+      </div>
+      <div className="pagination-container">
+        <Pagination count={10} color="primary" />
+      </div>
     </div>
   );
 };

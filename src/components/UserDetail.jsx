@@ -2,83 +2,62 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getUserById, downloadQRCode } from '../services/userService';
 import { Typography, Button, Grid } from '@mui/material';
+import './style/UserDetail.css'; // Import the new CSS file
 
 const UserDetail = () => {
-const { id } = useParams();
-const [user, setUser] = useState(null);
+  const { id } = useParams();
+  const [user, setUser] = useState(null);
 
-useEffect(() => {
-const fetchUser = async () => {
-const fetchedUser = await getUserById(id);
-console.log(fetchedUser);
-setUser(fetchedUser);
-};
+  useEffect(() => {
+    const fetchUser = async () => {
+      const fetchedUser = await getUserById(id);
+      console.log(fetchedUser);
+      setUser(fetchedUser);
+    };
 
-fetchUser();
-}, [id]);
+    fetchUser();
+  }, [id]);
 
-const handleDownloadQRCode = async (format) => {
-await downloadQRCode(id, format);
-};
+  const handleDownloadQRCode = async (format) => {
+    await downloadQRCode(id, format);
+  };
 
-if (!user) return <div>Loading...</div>;
+  if (!user) return <div>Loading...</div>;
 
-return (
-<div>
-<Typography variant="h4" gutterBottom>User Details</Typography>
-<Grid container spacing={2}>
-<Grid item xs={12}>
-<Typography variant="h6">  Name: {user.firstName} {user.lastName}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Primary Phone: {user.primaryPhone}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Secondary Phone: {user.secondaryPhone}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Email: {user.email}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Website: {user.website}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Company: {user.companyName}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Profession: {user.profession}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">City: {user.city}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Country: {user.country}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Postal Code: {user.postalCode}</Typography>
-        </Grid>
+  return (
+    <div className="paper-detail">
+      <div className='detail'>
+        <div className="grid-container-detail">
+          <div className="grid-item-qr-detail">
+            <img src={user.qrCodeUrl} alt="User QR Code" />
+          </div>
+          <div className="grid-item-info-detail">
+            <div className='item-info'>
+              <div className="typography"><strong>Nom :</strong> {user.lastName}</div>
+              <div className="typography"><strong>Prénoms :</strong> {user.firstName}</div>
+              <div className="typography"><strong>Pays :</strong> {user.country}</div>
+              <div className="typography"><strong>Ville :</strong> {user.city}</div>
+              <div className="typography"><strong>Téléphone :</strong> {user.primaryPhone}</div>
+            </div>
+            <div className='item-info'>
+              <div className="typography"><strong>Code postal :</strong> {user.postalCode}</div>
+              <div className="typography"><strong>Email :</strong> {user.email}</div>
+              <div className="typography"><strong>Site web :</strong> {user.website}</div>
+              <div className="typography"><strong>Entreprise :</strong> {user.companyName}</div>
+              <div className="typography"><strong>Profession :</strong> {user.profession}</div>
+            </div>
+          </div>
+        </div>
+        <div className="button-container-detail">
+          <button  onClick={() => handleDownloadQRCode('png')}>Download QR Code (PNG)</button>
+          <button onClick={() => handleDownloadQRCode('jpeg')}>Download QR Code (JPEG)</button>
+          <button  onClick={() => handleDownloadQRCode('jpg')}>Download QR Code (JPG)</button>
+        </div>
+        <div className="button-container-detail">
+          <Link  to={`/users/edit/${user._id}`}>Edit</Link>
+        </div>
+      </div>
 
-        <Grid item xs={12}>
-          <Typography variant="h6">Primary Color: {user.primaryColor}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Secondary Color: {user.secondaryColor}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Shape: {user.shape}</Typography>
-        </Grid>
-        <Grid item xs={12}>
-          <img src={user.qrCodeUrl} alt="User QR Code" />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={() => handleDownloadQRCode('png')}>Download QR Code (PNG)</Button>
-          <Button variant="contained" color="primary" onClick={() => handleDownloadQRCode('jpeg')}>Download QR Code (JPEG)</Button>
-          <Button variant="contained" color="primary" onClick={() => handleDownloadQRCode('jpg')}>Download QR Code (JPG)</Button>
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" component={Link} to={`/users/edit/${user._id}`}>Edit</Button>
-        </Grid>
-      </Grid>
     </div>
   );
 };

@@ -1,340 +1,368 @@
-  import React, { useEffect, useState } from 'react';
-  import { TextField, Button, Grid, MenuItem, Select, InputLabel, FormControl, Box, Typography, Paper } from '@mui/material';
-  import { createTheme, ThemeProvider } from '@mui/material/styles';
-  import { useParams, useNavigate } from 'react-router-dom';
-  import { createUser, getUserById, updateUser } from '../services/userService';
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { createUser, getUserById, updateUser } from '../services/userService';
+import { toast } from 'react-toastify'; // Importez toast
+import 'react-toastify/dist/ReactToastify.min.css' 
+import './style/UserForm.css';
 
-  // Create a custom theme with green color
-  const theme = createTheme({
-    palette: {
-      primary: {
-        main: '#388e3c', // Green
-      },
-      secondary: {
-        main: '#a5d6a7', // Light green
-      },
+const UserForm = ({ user = {} }) => {
+  const [formData, setFormData] = useState({
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    primaryPhone: user.primaryPhone || '',
+    secondaryPhone: user.secondaryPhone || '',
+    email: user.email || '',
+    website: user.website || '',
+    companyName: user.companyName || '',
+    profession: user.profession || '',
+    city: user.city || '',
+    country: user.country || '',
+    postalCode: user.postalCode || '',
+    socialLinks: {
+      linkedIn: user.socialLinks?.linkedIn || '',
+      tiktok: user.socialLinks?.tiktok || '',
+      facebook: user.socialLinks?.facebook || '',
+      snapchat: user.socialLinks?.snapchat || '',
+      telegram: user.socialLinks?.telegram || '',
+      instagram: user.socialLinks?.instagram || '',
+      twitter: user.socialLinks?.twitter || '',
     },
+    imageUrl: user.imageUrl || '',
+    primaryColor: user.primaryColor || '#000000',
+    secondaryColor: user.secondaryColor || '#ffffff',
+    shape: user.shape || 'square',
   });
 
-  const UserForm =  ({ user = {}}) => {
-    const [formData, setFormData] = useState({
-      firstName: user.firstName || '',
-      lastName: user.lastName || '',
-      primaryPhone: user.primaryPhone || '',
-      secondaryPhone: user.secondaryPhone || '',
-      email: user.email || '',
-      website: user.website || '',
-      companyName: user.companyName || '',
-      profession: user.profession || '',
-      city: user.city || '',
-      country: user.country || '',
-      postalCode: user.postalCode || '',
-      socialLinks: {
-        linkedIn: user.socialLinks?.linkedIn || '',
-        tiktok: user.socialLinks?.tiktok || '',
-        facebook: user.socialLinks?.facebook || '',
-        snapchat: user.socialLinks?.snapchat || '',
-        telegram: user.socialLinks?.telegram || '',
-        instagram: user.socialLinks?.instagram || '',
-        twitter: user.socialLinks?.twitter || '',
-      },
-    
-      imageUrl: user.imageUrl || '',
-      primaryColor: user.primaryColor || '#388e3c', // Default to green
-      secondaryColor: user.secondaryColor || '#a5d6a7', // Default to light green
-      shape: user.shape || 'square',
-    });
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const { id } = useParams();
-    const navigate = useNavigate();
-
-    useEffect(() => {
-      let isMounted = true;
-    
-      const fetchData = async () => {
-        if (id) {
-          try {
-            const userData = await getUserById(id);
-            if (isMounted) {
-              setFormData(userData);
-            }
-          } catch (error) {
-            console.error('Error fetching user data:', error);
+  useEffect(() => {
+    let isMounted = true;
+    const fetchData = async () => {
+      if (id) {
+        try {
+          const userData = await getUserById(id);
+          if (isMounted) {
+            setFormData(userData);
           }
+        } catch (error) {
+          console.error('Error fetching user data:', error);
         }
-      };
-    
-      fetchData();
-    
-      return () => {
-        isMounted = false;
-      };
-    }, [id]);
-
-    const handleChange = (e) => {
-      const { name, value } = e.target;
-      if (name.startsWith('socialLinks.')) {
-        const socialLinkKey = name.split('.')[1];
-        setFormData(prevState => ({
-          ...prevState,
-          socialLinks: {
-            ...prevState.socialLinks,
-            [socialLinkKey]: value
-          }
-        }));
-      } else {
-        setFormData(prevState => ({ ...prevState, [name]: value }));
       }
     };
-
-    const handleSubmit = async (e) => {
-      e.preventDefault();
-      try {
-          if (id) {
-            // Modification
-            await updateUser(id, formData);
-          } else {
-            // Création
-            console.log('====================================');
-            console.log(formData);
-            console.log('====================================');
-            await createUser(formData);
-          }
-          //navigate('/'); // Redirection vers la liste des utilisateurs
-        } catch (error) {
-          console.error('Error submitting form:', error);
-        }
+    fetchData();
+    return () => {
+      isMounted = false;
     };
+  }, [id]);
 
-    return (
-      <ThemeProvider theme={theme}>
-        <Box sx={{ mt: 4, p: 2 }}>
-          <Paper elevation={3} sx={{ p: 4 }}>
-            <Typography variant="h5" color="primary" gutterBottom>
-              User Form
-            </Typography>
-            <form onSubmit={handleSubmit}>
-              <Grid container spacing={3}>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="firstName"
-                    label="First Name"
-                    value={formData.firstName}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="lastName"
-                    label="Last Name"
-                    value={formData.lastName}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="primaryPhone"
-                    label="Primary Phone"
-                    value={formData.primaryPhone}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="secondaryPhone"
-                    label="Secondary Phone"
-                    value={formData.secondaryPhone}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="email"
-                    label="Email"
-                    value={formData.email}
-                    onChange={handleChange}
-                    fullWidth
-                    required
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="website"
-                    label="Website"
-                    value={formData.website}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="companyName"
-                    label="Company Name"
-                    value={formData.companyName}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="profession"
-                    label="Profession"
-                    value={formData.profession}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="city"
-                    label="City"
-                    value={formData.city}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="country"
-                    label="Country"
-                    value={formData.country}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="postalCode"
-                    label="Postal Code"
-                    value={formData.postalCode}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.linkedIn"
-                    label="LinkedIn"
-                    value={formData.socialLinks.linkedIn}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.tiktok"
-                    label="TikTok"
-                    value={formData.socialLinks.tiktok}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.facebook"
-                    label="Facebook"
-                    value={formData.socialLinks.facebook}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.snapchat"
-                    label="Snapchat"
-                    value={formData.socialLinks.snapchat}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.telegram"
-                    label="Telegram"
-                    value={formData.socialLinks.telegram}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.instagram"
-                    label="Instagram"
-                    value={formData.socialLinks.instagram}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="socialLinks.twitter"
-                    label="Twitter"
-                    value={formData.socialLinks.twitter}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    name="imageUrl"
-                    label="Image URL"
-                    value={formData.imageUrl}
-                    onChange={handleChange}
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="primaryColor"
-                    label="Primary Color"
-                    value={formData.primaryColor}
-                    onChange={handleChange}
-                    type="color"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <TextField
-                    name="secondaryColor"
-                    label="Secondary Color"
-                    value={formData.secondaryColor}
-                    onChange={handleChange}
-                    type="color"
-                    fullWidth
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <FormControl fullWidth>
-                    <InputLabel>Shape</InputLabel>
-                    <Select
-                      name="shape"
-                      value={formData.shape}
-                      onChange={handleChange}
-                      fullWidth
-                    >
-                      <MenuItem value="square">Square</MenuItem>
-                      <MenuItem value="circle">Circle</MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                <Button type="submit" variant="contained" color="primary" fullWidth>
-          {id ? 'Update User' : 'Create User'}
-        </Button>
-                </Grid>
-              </Grid>
-            </form>
-          </Paper>
-        </Box>
-      </ThemeProvider>
-    );
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    if (name.startsWith('socialLinks.')) {
+      const socialLinkKey = name.split('.')[1];
+      setFormData((prevState) => ({
+        ...prevState,
+        socialLinks: {
+          ...prevState.socialLinks,
+          [socialLinkKey]: value,
+        },
+      }));
+    } else {
+      setFormData((prevState) => ({ ...prevState, [name]: value }));
+    }
   };
 
-  export default UserForm;
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      if (id) {
+        await updateUser(id, formData);
+        toast.success('Mise à jour réussie');
+      } else {
+        await createUser(formData);
+        toast.success('Qr code créer avec succés!');
+      }
+      navigate('/');
+    } catch (error) {
+      toast.error('Erreur');
+      console.error('Erreur submitting form:', error);
+    }
+  };
+
+  return (
+    <div className="container-form">
+      <div className='form'>
+        {/* Personal Information Section */}
+        <div className='section-form'>
+          <h3>Informations personnelles</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="firstName"
+                  placeholder="Prénoms"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="lastName"
+                  placeholder="Nom"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Contact Section */}
+        <div className='section-form'>
+          <h3>Contact</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="primaryPhone"
+                  placeholder="Numéro principal"
+                  value={formData.primaryPhone}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="secondaryPhone"
+                  placeholder="Numéro secondaire"
+                  value={formData.secondaryPhone}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email"
+                  value={formData.email}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="website"
+                  placeholder="Portfolio"
+                  value={formData.website}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Company Section */}
+        <div className='section-form'>
+          <h3>Entreprise</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="companyName"
+                  placeholder="Nom de l'entreprise"
+                  value={formData.companyName}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="profession"
+                  placeholder="Profession"
+                  value={formData.profession}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Address Section */}
+        <div className='section-form'>
+          <h3>Adresse</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Pays"
+                  value={formData.country}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="city"
+                  placeholder="Ville"
+                  value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="postalCode"
+                  placeholder="Code postal"
+                  value={formData.postalCode}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className='section-form'>
+        <h3>Design Qr code</h3>
+        <div className='content-form'>
+          <div className='col-form'>
+            <div className="grid-item-form">
+              <label htmlFor="primaryColor">Couleur primaire</label>
+              <input
+                id="primaryColor"
+                type="color"
+                name="primaryColor"
+                value={formData.primaryColor}
+                onChange={handleChange}
+              />
+            </div>
+            <div className="grid-item-form">
+              <label htmlFor="secondaryColor">Couleur secondaire</label>
+              <input
+                id="secondaryColor"
+                type="color"
+                name="secondaryColor"
+                value={formData.secondaryColor}
+                onChange={handleChange}
+              />
+            </div>
+          </div>
+          <div className='col-form'>
+            <div className="grid-item-form">
+              <label htmlFor="shape">Forme</label>
+              <select
+                id="shape"
+                name="shape"
+                value={formData.shape}
+                onChange={handleChange}
+              >
+                <option value="square">Carré</option>
+                <option value="circle">round</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+        {/* Social Links Section */}
+        <div className='section-form'>
+          <h3>Réseaux sociaux</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.facebook"
+                  placeholder="Facebook"
+                  value={formData.socialLinks.facebook}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.linkedIn"
+                  placeholder="LinkedIn"
+                  value={formData.socialLinks.linkedIn}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.tiktok"
+                  placeholder="TikTok"
+                  value={formData.socialLinks.tiktok}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.snapchat"
+                  placeholder="Snapchat"
+                  value={formData.socialLinks.snapchat}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.telegram"
+                  placeholder="Telegram"
+                  value={formData.socialLinks.telegram}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.instagram"
+                  placeholder="Instagram"
+                  value={formData.socialLinks.instagram}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="socialLinks.twitter"
+                  placeholder="Twitter"
+                  value={formData.socialLinks.twitter}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Submit Button */}
+        <div className='section-btn'>
+          <button type="submit" onClick={handleSubmit}>Submit</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default UserForm;

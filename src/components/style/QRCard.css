@@ -1,0 +1,63 @@
+/* QRCard.css */
+*{
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.paper {
+    display: flex;
+    flex-wrap: nowrap;
+    /* background-color: black; */
+    width: 550PX;
+    padding: 10px;
+    border-radius: 10px;
+    background-color: #fafafa;
+
+  }
+  
+  .grid-container {
+    display: flex;
+    width: 100%;
+    flex-wrap: nowrap;
+
+    align-items: center;
+    /* padding: 5px; */
+
+
+  }
+  
+  .grid-item-qr {
+    width: 230px;
+    display: flex;
+    margin: 0 10px;
+  }
+  .grid-item-qr img{
+    width: 100%;
+  }
+  
+  
+  .grid-item-info {
+    display: flex;
+    flex-direction: column;
+    width: 50%;
+  }
+  
+  .typography {
+    margin-bottom: 8px;
+  }
+  
+  .button-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5px 0;
+    background-color: #0D1B2A;
+    color: #fff;
+    width: 100%;
+    padding: 10px 15px;
+    text-decoration: none;
+  }
+  
+  .button {
+
+  }
+  

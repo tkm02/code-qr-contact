@@ -7,6 +7,7 @@ import UserDetail from './components/UserDetail';
 import { Container, CssBaseline, AppBar, Toolbar, Typography } from '@mui/material';
 import Page404 from './components/Page404';
 import {createUser} from './services/userService'
+import NavBar from './components/NavBar';
 
 function App() {
   const handleUserSubmit = async (userData) => {
@@ -21,11 +22,9 @@ function App() {
     <Router>
       <CssBaseline />
       <AppBar position="static">
-        <Toolbar>
-          <Typography variant="h6">QR Code Generator</Typography>
-        </Toolbar>
+        <NavBar />
       </AppBar>
-      <Container>
+      <>
         <Routes>
           <Route path="/" element={<UserList />} />
           <Route path="/users/new" element={<UserForm onSubmit={handleUserSubmit} />} />
@@ -33,7 +32,7 @@ function App() {
           <Route path="/users/:id" element={<UserDetail />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
-      </Container>
+      </>
     </Router>
   );
 }
