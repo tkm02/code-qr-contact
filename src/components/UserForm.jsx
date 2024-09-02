@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { createUser, getUserById, updateUser } from '../services/userService';
-import { toast } from 'react-toastify'; // Importez toast
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css' 
 import './style/UserForm.css';
 
@@ -9,12 +9,14 @@ const UserForm = ({ user = {} }) => {
   const [formData, setFormData] = useState({
     firstName: user.firstName || '',
     lastName: user.lastName || '',
-    primaryPhone: user.primaryPhone || '',
-    secondaryPhone: user.secondaryPhone || '',
-    email: user.email || '',
+    personalPhone: user.personalPhone || '',
+    professionalPhone: user.professionalPhone || '',
+    personalEmail: user.personalEmail || '',
+    professionalEmail: user.professionalEmail || '',
     website: user.website || '',
     companyName: user.companyName || '',
     profession: user.profession || '',
+    bio: user.bio || '',
     city: user.city || '',
     country: user.country || '',
     postalCode: user.postalCode || '',
@@ -27,10 +29,10 @@ const UserForm = ({ user = {} }) => {
       instagram: user.socialLinks?.instagram || '',
       twitter: user.socialLinks?.twitter || '',
     },
-    imageUrl: user.imageUrl || '',
+    profileImageUrl: user.profileImageUrl || '',
     primaryColor: user.primaryColor || '#000000',
     secondaryColor: user.secondaryColor || '#ffffff',
-    shape: user.shape || 'square',
+    qrCodeShape: user.qrCodeShape || 'square',
   });
 
   const { id } = useParams();
@@ -80,7 +82,7 @@ const UserForm = ({ user = {} }) => {
         toast.success('Mise à jour réussie');
       } else {
         await createUser(formData);
-        toast.success('Qr code créer avec succés!');
+        toast.success('QR code créé avec succès!');
       }
       navigate('/');
     } catch (error) {
@@ -101,7 +103,7 @@ const UserForm = ({ user = {} }) => {
                 <input
                   type="text"
                   name="firstName"
-                  placeholder="Prénoms"
+                  placeholder="Prénom"
                   value={formData.firstName}
                   onChange={handleChange}
                   required
@@ -118,6 +120,16 @@ const UserForm = ({ user = {} }) => {
                 />
               </div>
             </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <textarea
+                  name="bio"
+                  placeholder="Biographie"
+                  value={formData.bio}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -128,20 +140,20 @@ const UserForm = ({ user = {} }) => {
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
-                  name="primaryPhone"
-                  placeholder="Numéro principal"
-                  value={formData.primaryPhone}
+                  type="tel"
+                  name="personalPhone"
+                  placeholder="Numéro personnel"
+                  value={formData.personalPhone}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="grid-item-form">
                 <input
-                  type="text"
-                  name="secondaryPhone"
-                  placeholder="Numéro secondaire"
-                  value={formData.secondaryPhone}
+                  type="tel"
+                  name="professionalPhone"
+                  placeholder="Numéro professionnel"
+                  value={formData.professionalPhone}
                   onChange={handleChange}
                 />
               </div>
@@ -150,19 +162,39 @@ const UserForm = ({ user = {} }) => {
               <div className="grid-item-form">
                 <input
                   type="email"
-                  name="email"
-                  placeholder="Email"
-                  value={formData.email}
+                  name="personalEmail"
+                  placeholder="Email personnel"
+                  value={formData.personalEmail}
                   onChange={handleChange}
                   required
                 />
               </div>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="email"
+                  name="professionalEmail"
+                  placeholder="Email professionnel"
+                  value={formData.professionalEmail}
+                  onChange={handleChange}
+                />
+              </div>
+            </div>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <input
+                  type="url"
                   name="website"
-                  placeholder="Portfolio"
+                  placeholder="Site web"
                   value={formData.website}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="url"
+                  name="profileImageUrl"
+                  placeholder="URL de la photo de profil"
+                  value={formData.profileImageUrl}
                   onChange={handleChange}
                 />
               </div>
@@ -236,47 +268,49 @@ const UserForm = ({ user = {} }) => {
             </div>
           </div>
         </div>
+
+        {/* QR Code Design Section */}
         <div className='section-form'>
-        <h3>Design Qr code</h3>
-        <div className='content-form'>
-          <div className='col-form'>
-            <div className="grid-item-form">
-              <label htmlFor="primaryColor">Couleur primaire</label>
-              <input
-                id="primaryColor"
-                type="color"
-                name="primaryColor"
-                value={formData.primaryColor}
-                onChange={handleChange}
-              />
+          <h3>Design QR code</h3>
+          <div className='content-form'>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <label htmlFor="primaryColor">Couleur primaire</label>
+                <input
+                  id="primaryColor"
+                  type="color"
+                  name="primaryColor"
+                  value={formData.primaryColor}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <label htmlFor="secondaryColor">Couleur secondaire</label>
+                <input
+                  id="secondaryColor"
+                  type="color"
+                  name="secondaryColor"
+                  value={formData.secondaryColor}
+                  onChange={handleChange}
+                />
+              </div>
             </div>
-            <div className="grid-item-form">
-              <label htmlFor="secondaryColor">Couleur secondaire</label>
-              <input
-                id="secondaryColor"
-                type="color"
-                name="secondaryColor"
-                value={formData.secondaryColor}
-                onChange={handleChange}
-              />
-            </div>
-          </div>
-          <div className='col-form'>
-            <div className="grid-item-form">
-              <label htmlFor="shape">Forme</label>
-              <select
-                id="shape"
-                name="shape"
-                value={formData.shape}
-                onChange={handleChange}
-              >
-                <option value="square">Carré</option>
-                <option value="circle">round</option>
-              </select>
+            <div className='col-form'>
+              <div className="grid-item-form">
+                <label htmlFor="qrCodeShape">Forme</label>
+                <select
+                  id="qrCodeShape"
+                  name="qrCodeShape"
+                  value={formData.qrCodeShape}
+                  onChange={handleChange}
+                >
+                  <option value="square">Carré</option>
+                  <option value="circle">Rond</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
         {/* Social Links Section */}
         <div className='section-form'>
@@ -285,7 +319,7 @@ const UserForm = ({ user = {} }) => {
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.facebook"
                   placeholder="Facebook"
                   value={formData.socialLinks.facebook}
@@ -294,7 +328,7 @@ const UserForm = ({ user = {} }) => {
               </div>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.linkedIn"
                   placeholder="LinkedIn"
                   value={formData.socialLinks.linkedIn}
@@ -305,7 +339,7 @@ const UserForm = ({ user = {} }) => {
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.tiktok"
                   placeholder="TikTok"
                   value={formData.socialLinks.tiktok}
@@ -314,7 +348,7 @@ const UserForm = ({ user = {} }) => {
               </div>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.snapchat"
                   placeholder="Snapchat"
                   value={formData.socialLinks.snapchat}
@@ -325,7 +359,7 @@ const UserForm = ({ user = {} }) => {
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.telegram"
                   placeholder="Telegram"
                   value={formData.socialLinks.telegram}
@@ -334,7 +368,7 @@ const UserForm = ({ user = {} }) => {
               </div>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.instagram"
                   placeholder="Instagram"
                   value={formData.socialLinks.instagram}
@@ -345,7 +379,7 @@ const UserForm = ({ user = {} }) => {
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
+                  type="url"
                   name="socialLinks.twitter"
                   placeholder="Twitter"
                   value={formData.socialLinks.twitter}
@@ -358,7 +392,7 @@ const UserForm = ({ user = {} }) => {
 
         {/* Submit Button */}
         <div className='section-btn'>
-          <button type="submit" onClick={handleSubmit}>Submit</button>
+          <button type="submit" onClick={handleSubmit}>Envoyer</button>
         </div>
       </div>
     </div>

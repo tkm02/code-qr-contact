@@ -8,6 +8,7 @@ import { Container, CssBaseline, AppBar, Toolbar, Typography } from '@mui/materi
 import Page404 from './components/Page404';
 import {createUser} from './services/userService'
 import NavBar from './components/NavBar';
+import UserProfilePage from './components/UserProfilePage';
 
 function App() {
   const handleUserSubmit = async (userData) => {
@@ -30,6 +31,7 @@ function App() {
           <Route path="/users/new" element={<UserForm onSubmit={handleUserSubmit} />} />
           <Route path="/users/edit/:id" element={<UserForm />} />
           <Route path="/users/:id" element={<UserDetail />} />
+          <Route path="/profile/:id" element={<UserProfilePage />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </>

@@ -1,7 +1,7 @@
 // src/services/userService.js
 import axios from 'axios';
 
-const API_URL = 'http://192.168.252.133:5000/api/users';
+const API_URL = 'http://192.168.252.115:5000/api/users';
 
 export const createUser = async (userData) => {
   const response = await axios.post(API_URL, userData);
