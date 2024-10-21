@@ -91,12 +91,27 @@ const UserForm = ({ user = {} }) => {
     }
   };
 
+  const handleFileChange = (event) => {
+    const file = event.target.files[0];
+
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData(prevData => ({
+          ...prevData,
+          profileImageUrl: reader.result // Save Base64 string
+        }));
+      };
+      reader.readAsDataURL(file); // Convert to Base64
+    }
+  };
+
   return (
     <div className="container-form">
       <div className='form'>
         {/* Personal Information Section */}
         <div className='section-form'>
-          <h3>Informations personnelles</h3>
+          <h3>Informations personnelles</h3> 
           <div className='content-form'>
             <div className='col-form'>
               <div className="grid-item-form">
@@ -179,32 +194,12 @@ const UserForm = ({ user = {} }) => {
                 />
               </div>
             </div>
-            <div className='col-form'>
-              <div className="grid-item-form">
-                <input
-                  type="url"
-                  name="website"
-                  placeholder="Site web"
-                  value={formData.website}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="grid-item-form">
-                <input
-                  type="url"
-                  name="profileImageUrl"
-                  placeholder="URL de la photo de profil"
-                  value={formData.profileImageUrl}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Company Section */}
+        {/* Company Info Section */}
         <div className='section-form'>
-          <h3>Entreprise</h3>
+          <h3>Informations sur entreprise</h3>
           <div className='content-form'>
             <div className='col-form'>
               <div className="grid-item-form">
@@ -216,8 +211,6 @@ const UserForm = ({ user = {} }) => {
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className='col-form'>
               <div className="grid-item-form">
                 <input
                   type="text"
@@ -228,29 +221,40 @@ const UserForm = ({ user = {} }) => {
                 />
               </div>
             </div>
-          </div>
-        </div>
-
-        {/* Address Section */}
-        <div className='section-form'>
-          <h3>Adresse</h3>
-          <div className='content-form'>
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="text"
-                  name="country"
-                  placeholder="Pays"
-                  value={formData.country}
+                  type="url"
+                  name="website"
+                  placeholder="Site Web"
+                  value={formData.website}
                   onChange={handleChange}
                 />
               </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Location Section */}
+        <div className='section-form'>
+          <h3>Localisation</h3>
+          <div className='content-form'>
+            <div className='col-form'>
               <div className="grid-item-form">
                 <input
                   type="text"
                   name="city"
                   placeholder="Ville"
                   value={formData.city}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
+                  name="country"
+                  placeholder="Pays"
+                  value={formData.country}
                   onChange={handleChange}
                 />
               </div>
@@ -269,77 +273,23 @@ const UserForm = ({ user = {} }) => {
           </div>
         </div>
 
-        {/* QR Code Design Section */}
-        <div className='section-form'>
-          <h3>Design QR code</h3>
-          <div className='content-form'>
-            <div className='col-form'>
-              <div className="grid-item-form">
-                <label htmlFor="primaryColor">Couleur primaire</label>
-                <input
-                  id="primaryColor"
-                  type="color"
-                  name="primaryColor"
-                  value={formData.primaryColor}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="grid-item-form">
-                <label htmlFor="secondaryColor">Couleur secondaire</label>
-                <input
-                  id="secondaryColor"
-                  type="color"
-                  name="secondaryColor"
-                  value={formData.secondaryColor}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className='col-form'>
-              <div className="grid-item-form">
-                <label htmlFor="qrCodeShape">Forme</label>
-                <select
-                  id="qrCodeShape"
-                  name="qrCodeShape"
-                  value={formData.qrCodeShape}
-                  onChange={handleChange}
-                >
-                  <option value="square">Carré</option>
-                  <option value="circle">Rond</option>
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-
         {/* Social Links Section */}
         <div className='section-form'>
-          <h3>Réseaux sociaux</h3>
+          <h3>Liens sociaux</h3>
           <div className='content-form'>
             <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="url"
-                  name="socialLinks.facebook"
-                  placeholder="Facebook"
-                  value={formData.socialLinks.facebook}
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="grid-item-form">
-                <input
-                  type="url"
+                  type="text"
                   name="socialLinks.linkedIn"
                   placeholder="LinkedIn"
                   value={formData.socialLinks.linkedIn}
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="url"
+                  type="text"
                   name="socialLinks.tiktok"
                   placeholder="TikTok"
                   value={formData.socialLinks.tiktok}
@@ -348,18 +298,25 @@ const UserForm = ({ user = {} }) => {
               </div>
               <div className="grid-item-form">
                 <input
-                  type="url"
+                  type="text"
+                  name="socialLinks.facebook"
+                  placeholder="Facebook"
+                  value={formData.socialLinks.facebook}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="grid-item-form">
+                <input
+                  type="text"
                   name="socialLinks.snapchat"
                   placeholder="Snapchat"
                   value={formData.socialLinks.snapchat}
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="url"
+                  type="text"
                   name="socialLinks.telegram"
                   placeholder="Telegram"
                   value={formData.socialLinks.telegram}
@@ -368,18 +325,16 @@ const UserForm = ({ user = {} }) => {
               </div>
               <div className="grid-item-form">
                 <input
-                  type="url"
+                  type="text"
                   name="socialLinks.instagram"
                   placeholder="Instagram"
                   value={formData.socialLinks.instagram}
                   onChange={handleChange}
                 />
               </div>
-            </div>
-            <div className='col-form'>
               <div className="grid-item-form">
                 <input
-                  type="url"
+                  type="text"
                   name="socialLinks.twitter"
                   placeholder="Twitter"
                   value={formData.socialLinks.twitter}
@@ -390,9 +345,21 @@ const UserForm = ({ user = {} }) => {
           </div>
         </div>
 
-        {/* Submit Button */}
-        <div className='section-btn'>
-          <button type="submit" onClick={handleSubmit}>Envoyer</button>
+        {/* Profile Image Upload */}
+        <div className="section-form">
+          <h3>Télécharger une image de profil</h3>
+          <div className="grid-item-form">
+            <input
+              type="file"
+              name="profileImage"
+              accept="image/*"
+              onChange={handleFileChange}
+            />
+          </div>
+        </div>
+
+        <div className='button-form'>
+          <button type="submit" onClick={handleSubmit}>Soumettre</button>
         </div>
       </div>
     </div>

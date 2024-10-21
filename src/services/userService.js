@@ -1,7 +1,9 @@
 // src/services/userService.js
 import axios from 'axios';
 
-const API_URL = 'http://192.168.252.115:5000/api/users';
+//const API_URL = 'https://backend-qr-code-contact.onrender.com/api/users';
+const API_URL = 'https://apimiddleware-1.onrender.com/api/users';
+//const API_URL = 'http://192.168.1.6:5000/api/users'; 
 
 export const createUser = async (userData) => {
   const response = await axios.post(API_URL, userData);
@@ -11,7 +13,8 @@ export const createUser = async (userData) => {
 
 export const getAllUsers = async () => {
   const response = await axios.get(API_URL);
-  return response.data;
+  console.log(response)
+  return response.data.users;
 };
 
 export const getUserById = async (id) => {

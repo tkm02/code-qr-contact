@@ -26,11 +26,14 @@ const UserList = () => {
     <div className="container-list">
       <h4 className="title">Listes QR code</h4>
       <div className="grid-container-list">
-        {users.map((user, index) => (
+      {users
+        .filter(user => user.companyName !== 'ATHARI ADVISOR') // Filtrer les utilisateurs qui ne sont pas 'yyy'
+        .map((user, index) => (
           <div className="grid-item-list" key={index}>
             <QRCard user={user} />
           </div>
-        ))}
+        ))
+      }
       </div>
       <div className="pagination-container">
         <Pagination count={10} color="primary" />

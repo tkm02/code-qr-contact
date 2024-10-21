@@ -29,22 +29,22 @@ const UserDetail = () => {
       <div className='detail'>
         <div className="grid-container-detail">
           <div className="grid-item-qr-detail">
-            <img src={user.qrCodeUrl} alt="User QR Code" />
+            <img src={user.user.qrCodeUrl} alt="User QR Code" />
           </div>
           <div className="grid-item-info-detail">
             <div className='item-info'>
-              <div className="typography"><strong>Nom :</strong> {user.lastName}</div>
-              <div className="typography"><strong>Prénoms :</strong> {user.firstName}</div>
-              <div className="typography"><strong>Pays :</strong> {user.country}</div>
-              <div className="typography"><strong>Ville :</strong> {user.city}</div>
-              <div className="typography"><strong>Téléphone :</strong> {user.primaryPhone}</div>
+              <div className="typography"><strong>Nom :</strong> {user.user.lastName}</div>
+              <div className="typography"><strong>Prénoms :</strong> {user.user.firstName}</div>
+              <div className="typography"><strong>Pays :</strong> {user.user.country}</div>
+              <div className="typography"><strong>Ville :</strong> {user.user.city}</div>
+              <div className="typography"><strong>Téléphone :</strong> {user.user.primaryPhone}</div>
             </div>
             <div className='item-info'>
-              <div className="typography"><strong>Code postal :</strong> {user.postalCode}</div>
-              <div className="typography"><strong>Email :</strong> {user.email}</div>
-              <div className="typography"><strong>Site web :</strong> {user.website}</div>
-              <div className="typography"><strong>Entreprise :</strong> {user.companyName}</div>
-              <div className="typography"><strong>Profession :</strong> {user.profession}</div>
+              <div className="typography"><strong>Code postal :</strong> {user.user.postalCode}</div>
+              <div className="typography"><strong>Email :</strong> {user.user.email}</div>
+              <div className="typography"><strong>Site web :</strong> {user.user.website}</div>
+              <div className="typography"><strong>Entreprise :</strong> {user.user.companyName}</div>
+              <div className="typography"><strong>Profession :</strong> {user.user.profession}</div>
             </div>
           </div>
         </div>
@@ -54,7 +54,7 @@ const UserDetail = () => {
           <button  onClick={() => handleDownloadQRCode('jpg')}>Download QR Code (JPG)</button>
         </div>
         <div className="button-container-detail">
-          <Link  to={`/users/edit/${user._id}`}>Edit</Link>
+          <Link  to={`/users/edit/${user.user._id}`}>Edit</Link>
         </div>
       </div>
 
